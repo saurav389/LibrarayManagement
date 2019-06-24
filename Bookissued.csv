@@ -1,0 +1,5 @@
+SlNo,Studentid,StudentName,RegNo,RollNo,Mno,email,Bookid,BookName,AuthorName,IssueDate,SubmitDate,status
+1,9,saurav,08,08,9709034901,mailtoaict@gmail.com,2,Programing in c++,E Balagurusami,2019-06-16 23:36:25.696837,30,False
+2,9,saurav,08,08,9709034901,mailtoaict@gmail.com,4,Automating Boring Stuff with Python,Manaj Tiwari,2019-06-16 23:37:07.298217,30,False
+6,7,moni kumari,04,04,7979815545,monimidnightgirl@gmail.com,6,python for beginners,s gopal swami,19/6/2019,,True
+7,4,rahul,1,1,9431953023,rahulbadmashcompany@gmail.com,4,Automating Boring Stuff with Python,Manaj Tiwari,24/6/2019,,True

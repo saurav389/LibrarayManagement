@@ -6,7 +6,7 @@ from issuebook import search_student
 import os
 student = StudentRegistration()
 book = BookRegistration()
-issue = search_student
+issue = search_student()
 file_item_path = os.path.join(os.path.dirname(__file__),"Bookissued.csv")
 filename= file_item_path
 choise = input(" y = Yes / N = No for MAIN MENU")
@@ -28,10 +28,10 @@ while choise is "y":
         elif option is 2:
             book.InsertData()
         elif option is 3:
-            #SlNo = issue.get_length("self")
-            issue.issue_book("self")
+            #SlNo = issue.get_length()
+            issue.issue_book()
         elif option is 4:
-            issue.submit_book("self")
+            issue.submit_book()
         elif option is 5:
             mes="Book id = {Bookid}\nBook Name = {BookName}"
             with open(filename,"r")as csvfile:
@@ -41,9 +41,9 @@ while choise is "y":
                     #print(row['Bookid'])
                     #print(row['BookName'])
         elif option is 6:
-            issue.get_student_details("self")
+            issue.get_student_details()
         elif option is 7:
-            issue.get_book_details("self")
+            issue.get_book_details()
     else:
         print("invalid input\nPlease input less than 7")
     choise = input("Do you want to continue y = Yes / N = No")

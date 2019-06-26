@@ -7,14 +7,18 @@ from tempfile import NamedTemporaryFile
 class search_student():
     today = datetime.date.today()
     text = '{today.day}/{today.month}/{today.year}'.format(today=today)
+    get_student_filepath = os.path.join(os.path.dirname(__file__),"StudentDetails.csv")
+    student_filename = get_student_filepath
+    get_book_filepath = os.path.join(os.path.dirname(__file__),"BookDetails.csv")
+    book_filename = get_book_filepath
+    get_issuedbook_filepath = os.path.join(os.path.dirname(__file__),"Bookissued.csv")
+    issuedbook_filename = get_issuedbook_filepath
     def get_student_details(self):
         message = "Student Details Found \n \t Student id = {Studid}\n\t Name = {name}\n\t class = {Clss}"
         id = input("Student id")
         studdata = {}
-        get_student_filepath = os.path.join(os.path.dirname(__file__),"StudentDetails.csv")
-        Studfilename = get_student_filepath
         # name = input("Student name")
-        with open(Studfilename, "r") as csvfile:
+        with open(self.student_filename, "r") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 if row['Studid'] == id:
@@ -45,12 +49,10 @@ class search_student():
         Bkid = input("Book id")
         # name = input("Student name")
         bookdata = {}
-        get_bookfile_path = os.path.join(os.path.dirname(__file__),"BookDetails.csv")
-        bookfilename = get_bookfile_path
-        with open(get_bookfile_path, "r") as csvfile:
+        with open(self.book_filename, "r") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                if row['Bookid'] == Bkid:
+                if row['Bookid'] is Bkid:
                     # print("Student id ", row['Studid'])
                     print(message.format(Bookid = row['Bookid'], BookName = row['BookName'], AuthorName = row['AuthorName']))
                     bookdata = {
@@ -65,44 +67,46 @@ class search_student():
                 print(Fore.RED + "Books Data Not Found")
                 return bookdata
     def get_length(self):
-        get_path = os.path.join(os.path.dirname(__file__),"Bookissued.csv")
-        Filename = get_path
-        # fieldname = ['SlNo','Studentid', 'StudentName', 'RegNo', 'RollNo', 'Mno', 'email', 'Bookid', 'BookName', 'AuthorName','IssueDate', 'SubmitDate']
-        if not os.path.isfile(Filename):
+        fieldname = ['SlNo','Studentid','StudentName','RegNo','RollNo','Mno','email','Bookid','BookName','AuthorName','IssueDate','SubmitDate','status']
+        if not os.path.isfile(self.issuedbook_filename):
+            with open(self.issuedbook_filename,"w",newline='') as csvfile:
+                writer = csv.DictWriter(csvfile,fieldnames=fieldname)
+                writer.writeheader()
+                #print(0)
             return 0
         else:
-            with open(Filename, "r") as csvfile:
+            with open(self.issuedbook_filename, "r") as csvfile:
                 reader = csv.reader(csvfile)
                 reader_list = list(reader)
+                #print(1)
                 return len(reader_list)
     def check_issued_book(self):
         student_data = self.get_student_details()
-        get_path = os.path.join(os.path.dirname(__file__), "Bookissued.csv")
-        Filename = get_path
-        with open(Filename,"r") as csvfile:
+        with open(self.issuedbook_filename,"r") as csvfile:
             reader = csv.DictReader(csvfile)
             count = 0
             for data in reader:
                 if data['Studentid'] is student_data['studid']:
-                    count=count+1
+                    if data['status'] is "True":
+                        count=count+1
             return count
     def issue_book(self):
         fieldname = ['SlNo','Studentid','StudentName','RegNo','RollNo','Mno','email','Bookid','BookName','AuthorName','IssueDate','SubmitDate','status']
-        get_path = os.path.join(os.path.dirname(__file__), "Bookissued.csv")
-        Filename = get_path
         SlNo = self.get_length()
         if SlNo > 0:
             student_data = self.get_student_details()
-            with open(Filename, "r") as csvfile:
+            with open(self.issuedbook_filename, "r") as csvfile:
                 reader = csv.DictReader(csvfile)
                 count = 0
+                stat = 'True'
                 for data in reader:
                     if data['Studentid'] is student_data['studid']:
-                        count = count + 1
+                        if data['status'] == stat:
+                            count = count + 1
             if count < 2:
                 if student_data is not None:
                     Book_data = self.get_book_details()
-                    with open(Filename,"a",newline='') as csvfile:
+                    with open(self.issuedbook_filename,"a",newline='') as csvfile:
                         writer = csv.DictWriter(csvfile,fieldnames=fieldname)
                         #writer.writeheader()
                         writer.writerow({
@@ -122,6 +126,11 @@ class search_student():
                             })
             else:
                 print("Not Eligible\nPlease Submit your Previous Issued Book")
+                with open(self.issuedbook_filename,"r")as csvfile:
+                    reader = csv.DictReader(csvfile)
+                    print("Your Issued Books Are\n")
+                    for row in reader:
+                        print(row['BookName'])
         else:
             # Print("File not present")
             Filename = "Bookissued.csv"
@@ -131,12 +140,10 @@ class search_student():
                 writer = csv.DictWriter(csvfile, fieldnames=fieldname)
                 writer.writeheader()
     def submit_book(self):
-        get_path = os.path.join(os.path.dirname(__file__), "Bookissued.csv")
-        filename = get_path
         #filename = "Bookissued.csv"
         fieldname = ['SlNo', 'Studentid', 'StudentName', 'RegNo', 'RollNo', 'Mno', 'email', 'Bookid', 'BookName', 'AuthorName', 'IssueDate', 'SubmitDate', 'status']
-        temp_file = NamedTemporaryFile(mode ='r+', delete=False)
-        with open(filename,"r+") as csvfile, temp_file:
+        temp_file = NamedTemporaryFile(mode ='r+',newline='', delete=False)
+        with open(self.issuedbook_filename,"r+") as csvfile, temp_file:
             reader = csv.DictReader(csvfile)
             # Fieldname = ['SlNo', 'Studentid', 'StudentName', 'RegNo', 'RollNo', 'Mno', 'email', 'Bookid', 'BookName','AuthorName', 'IssueDate', 'SubmitDate', 'status']
             writer = csv.DictWriter(temp_file, fieldnames=fieldname)
@@ -147,14 +154,15 @@ class search_student():
                 print(Fore.BLUE + '')
                 if row['Studentid'] is student_data['studid']:
                     if row['Bookid'] is book_data['bookid']:
-                        row['status']= False,
                         row['SubmitDate'] = self.text
-                    print(row)
+                        row['status']= False
+                        print("BOOK ID ",row['Bookid'],"\nBook Name ",row['BookName'],"\n\n\n\t STATUS ",row['status'])
                 writer.writerow(row)
-        shutil.move(temp_file.name,filename)
+        shutil.move(temp_file.name,self.issuedbook_filename)
 
 #obj = search_student()
 #obj.get_student_details()
 #obj.get_book_details()
 #obj.issue_book()
 #obj.submit_book()
+#obj.get_length()

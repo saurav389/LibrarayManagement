@@ -47,22 +47,3 @@ while choise is "y":
     else:
         print("invalid input\nPlease input less than 7")
     choise = input("Do you want to continue y = Yes / N = No")
-
-
-
-
-
-
-
-
-""""a=int(input())
-if a is 1:
-    student = StudentRegistration()
-    student.InsertData()
-else:
-    print("Not imported")
-
-print("hello world")
-
-
-parser = ArgumentParser(prog="Library_Manangement")"""""

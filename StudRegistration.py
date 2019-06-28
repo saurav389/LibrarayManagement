@@ -3,8 +3,8 @@ import csv
 from colorama import Fore,Back,Style
 # Stud_details = {'Reg_no','Stud_id','Roll_no','Class','name','FName','Gender','DOB','DOA'}
 class StudentRegistration():
-    Fieldname = ['Studid','Regno','Rollno','Class','Name','FName','Gender','DOB','DOA','MNo','Email']
-    Filename = "StudentDetails.csv"
+    get_file_path = os.path.join(os.path.dirname(__file__),"StudentDetails.csv")
+    Filename = get_file_path
     def get_length(self):
         if not os.path.isfile(self.Filename):
             print(Back.RED + "")

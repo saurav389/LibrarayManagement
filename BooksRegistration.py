@@ -3,8 +3,8 @@ import csv
 from colorama import Fore,Back,Style
 # Creating a class of Book Registration
 class BookRegistration():
-    Fieldname = ['Bookid','BookName','AuthorName','Cost','Date'] #initializing Fieldnames of Books details
-    Filename = "BookDetails.csv" # Creating a Filename data of books details beeb stored
+    get_file_path = os.path.join(os.path.dirname(__file__),"BookDetails.csv")
+    Filename = get_file_path # Creating a Filename data of books details beeb stored
     def get_length(self):
         if not os.path.isfile(self.Filename):
             print(Back.RED + "")
